@@ -31,6 +31,9 @@ public final class YoutubeAPI {
 
     private YoutubeAPI() {
 
+    }
+
+    static {
         youtube = new YouTube.Builder(HTTP_TRANSPORT, JSON_FACTORY, new HttpRequestInitializer() {
             public void initialize(HttpRequest request) throws IOException {
             }
@@ -44,7 +47,7 @@ public final class YoutubeAPI {
                     .setKey(YOUTUBE_API_KEY)
                     .setQ(queryTerm)
                     .setType("video")
-                    .setFields("items(id(videoId),snippet(title,description,thumbnails/default/url))")
+                    .setFields("items(id(videoId),snippet(title,description,channelTitle,thumbnails/high/url))")
                     .setMaxResults(Long.valueOf(NUMBER_OF_VIDEOS_RETURNED));
 /*                    .setOrder(SearchSetting.getInstance().getOrder())
                     .setSafeSearch(SearchSetting.getInstance().getSafeSearch())

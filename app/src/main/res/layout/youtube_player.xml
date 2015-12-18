@@ -1,0 +1,82 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#0099cc"
+    tools:context="com.dane.karaoke.activity.YoutubePlayerActivity">
+
+    <!-- The primary full-screen view. This can be replaced with whatever view
+         is needed to present your content, e.g. VideoView, SurfaceView,
+         TextureView, etc. -->
+    <TextView
+        android:id="@+id/fullscreen_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:keepScreenOn="true"
+        android:text="@string/video_content"
+        android:textColor="#33b5e5"
+        android:textSize="50sp"
+        android:textStyle="bold" />
+
+    <VideoView
+        android:id="@+id/player"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center" />
+
+    <ProgressBar
+        android:id="@+id/playProgressBar"
+        style="@android:style/Widget.ProgressBar.Inverse"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin" />
+
+    <!-- This FrameLayout insets its children based on system windows using
+         android:fitsSystemWindows. -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true">
+
+        <LinearLayout
+            android:id="@+id/fullscreen_content_controls"
+            style="?metaButtonBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@color/black_overlay"
+            android:orientation="vertical"
+            tools:ignore="UselessParent">
+
+            <!--<Button
+                android:id="@+id/resume"
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
+                android:text="@string/resume_button" />
+
+            <Button
+                android:id="@+id/restart"
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
+                android:text="@string/restart_button" />
+
+            <Button
+                android:id="@+id/newSong"
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
+                android:text="@string/newSong_button" />-->
+
+            <Button
+                android:id="@+id/saveEarlier"
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
+                android:text="@string/saveEarlier_button" />
+
+
+        </LinearLayout>
+    </FrameLayout>
+
+</FrameLayout>
