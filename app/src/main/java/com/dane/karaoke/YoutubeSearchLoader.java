@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v4.content.AsyncTaskLoader;
 import android.util.Log;
 
+import com.google.api.services.youtube.model.SearchListResponse;
 import com.google.api.services.youtube.model.SearchResult;
 
 import java.util.List;
@@ -24,7 +25,11 @@ public class YoutubeSearchLoader extends AsyncTaskLoader<List<SearchResult>> {
     @Override
     public List<SearchResult> loadInBackground() {
         Log.i("YoutubeSearchLoader","loadInBackground " + keyword);
-        searchResults = YoutubeAPI.search(keyword).getItems();
+
+        SearchListResponse searchListResponse = YoutubeAPI.search(keyword);
+
+        if (searchListResponse != null)
+            searchResults = YoutubeAPI.search(keyword).getItems();
         return searchResults;
     }
 
@@ -83,7 +88,7 @@ public class YoutubeSearchLoader extends AsyncTaskLoader<List<SearchResult>> {
 
     @Override
     protected void onReset() {
-        Log.i("YoutubeSearchLoader","onReset " + keyword );
+        Log.i("YoutubeSearchLoader", "onReset " + keyword);
         // Ensure the loader has been stopped.
         onStopLoading();
 

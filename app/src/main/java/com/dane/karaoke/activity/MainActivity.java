@@ -138,7 +138,8 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     @Override
     public void onLoadFinished(Loader<List<SearchResult>> loader, List<SearchResult> data) {
         searchResults.clear();
-        searchResults.addAll(data);
+        if (data != null)
+            searchResults.addAll(data);
         searchAdapter.notifyDataSetChanged();
     }
 

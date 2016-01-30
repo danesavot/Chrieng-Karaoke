@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:id="@+id/videoCard"
-    android:layout_margin="8dp"
+    android:layout_marginTop="8dp"
     card_view:cardCornerRadius="4dp"
     card_view:cardElevation="2dp"
     android:layout_width="match_parent"
