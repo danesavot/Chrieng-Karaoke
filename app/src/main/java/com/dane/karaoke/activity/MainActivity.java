@@ -3,37 +3,39 @@ package com.dane.karaoke.activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
 import com.dane.karaoke.R;
-import com.dane.karaoke.YoutubeAPI;
 import com.dane.karaoke.YoutubeSearchAdapter;
-import com.google.api.services.youtube.model.SearchListResponse;
+import com.dane.karaoke.YoutubeSearchLoader;
 import com.google.api.services.youtube.model.SearchResult;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements SearchView.OnQueryTextListener, YoutubeSearchAdapter.OnItemClickListener {
+public class MainActivity extends AppCompatActivity implements SearchView.OnQueryTextListener,
+        YoutubeSearchAdapter.OnItemClickListener, LoaderManager.LoaderCallbacks<List<SearchResult>> {
 
+    public static final int GET_VIDEO = 0;
     private RecyclerView recycleView;
     private StaggeredGridLayoutManager staggeredGridLayoutManager;
 
     List<SearchResult> searchResults = new ArrayList<>();
     YoutubeSearchAdapter searchAdapter;
 
-    boolean duplicate;
     String query;
     SearchView searchView;
 
@@ -41,8 +43,13 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        query = "Karaoke";
+
+        getSupportLoaderManager().initLoader(GET_VIDEO,null,this);
 
         searchAdapter = new YoutubeSearchAdapter(this, searchResults);
         searchAdapter.setOnItemClickListener(this);
@@ -54,12 +61,12 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
         recycleView.setAdapter(searchAdapter);
 
-        performSearchTask("Karaoke");
+        //performSearchTask("Karaoke");
     }
 
-    private void performSearchTask(String karaoke) {
+ /* private void performSearchTask(String karaoke) {
         new YoutubeSearchTask().execute(karaoke);
-    }
+    }*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -102,25 +109,15 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     @Override
     public boolean onQueryTextSubmit(String query) {
 
-        if (!duplicate) {
-            this.query = query;
-            duplicate = true;
-            setTitle(query);
-            hideSoftKeyboard(searchView);
-            searchView.clearFocus();
-
-            performSearchTask(query + " karaoke");
-
-            return true;
-
-        }
-
-        return false;
+        return true;
     }
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        duplicate = false;
+
+        query = TextUtils.isEmpty(newText)?query:newText;
+        getSupportLoaderManager().restartLoader(GET_VIDEO,null,this);
+
         return true;
     }
 
@@ -133,7 +130,25 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
     }
 
-    public class YoutubeSearchTask extends AsyncTask<String, Void, SearchListResponse> {
+    @Override
+    public Loader<List<SearchResult>> onCreateLoader(int id, Bundle args) {
+        return new YoutubeSearchLoader(this,query);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<List<SearchResult>> loader, List<SearchResult> data) {
+        searchResults.clear();
+        searchResults.addAll(data);
+        searchAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onLoaderReset(Loader<List<SearchResult>> loader) {
+        searchResults.clear();
+        searchAdapter.notifyDataSetChanged();
+
+    }
+    /*public class YoutubeSearchTask extends AsyncTask<String, Void, SearchListResponse> {
         @Override
         protected SearchListResponse doInBackground(String... params) {
             return YoutubeAPI.search(params[0]);
@@ -147,5 +162,6 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                 searchAdapter.notifyDataSetChanged();
             }
         }
-    }
+    }*/
+
 }
